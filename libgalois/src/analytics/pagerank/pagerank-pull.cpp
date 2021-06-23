@@ -300,20 +300,22 @@ ExtractValueFromTopoGraph(
 katana::Result<void>
 PagerankPullTopological(
     katana::PropertyGraph* pg, const std::string& output_property_name,
-    katana::analytics::PagerankPlan plan) {
+    katana::analytics::PagerankPlan plan, const uint32_t num_trials) {
   katana::EnsurePreallocated(2, 3 * pg->num_nodes() * sizeof(NodeData));
 
   // NUMA-awere temporary node data
   katana::LargeArray<PagerankValueAndOutDegreeTy> node_data;
   node_data.allocateInterleaved(pg->num_nodes());
 
-  InitNodeDataTopological(*pg, &node_data);
-  ComputeOutDeg(*pg, &node_data);
+  for (uint32_t i = 0; i < num_trials; i++) {
+    InitNodeDataTopological(*pg, &node_data);
+    ComputeOutDeg(*pg, &node_data);
 
-  katana::StatTimer exec_time("PagerankPullTopological");
-  exec_time.start();
-  ComputePRTopological(*pg, plan, &node_data);
-  exec_time.stop();
+    katana::StatTimer exec_time("PagerankPullTopological");
+    exec_time.start();
+    ComputePRTopological(*pg, plan, &node_data);
+    exec_time.stop();
+  }
 
   return ExtractValueFromTopoGraph(pg, output_property_name, node_data);
 }

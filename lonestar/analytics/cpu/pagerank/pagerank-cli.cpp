@@ -38,7 +38,10 @@ static cll::opt<unsigned int> maxIterations(
     "maxIterations",
     cll::desc("Maximum iterations, applies round-based versions only"),
     cll::init(1000));
-
+static cll::opt<unsigned int> numTrials(
+    "numTrials",
+    cll::desc("Number of trials"),
+    cll::init(1));
 static cll::opt<PagerankPlan::Algorithm> algo(
     "algo", cll::desc("Choose an algorithm:"),
     cll::values(
@@ -87,7 +90,7 @@ main(int argc, char** argv) {
 
   PagerankPlan plan{kCPU, algo, tolerance, maxIterations, kAlpha};
 
-  if (auto r = Pagerank(pg.get(), "rank", plan); !r) {
+  if (auto r = Pagerank(pg.get(), "rank", plan, numTrials); !r) {
     KATANA_LOG_FATAL("Failed to run Pagerank {}", r.error());
   }
 

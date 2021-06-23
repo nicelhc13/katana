@@ -62,7 +62,7 @@ public:
   static PagerankPlan PullTopological(
       float tolerance = kDefaultTolerance,
       unsigned int max_iterations = kDefaultMaxIterations,
-      float alpha = kDefaultAlpha) {
+      float alpha = kDefaultAlpha, [[maybe_unused]] const uint32_t num_trials = 1) {
     return {kCPU, kPullTopological, tolerance, max_iterations, alpha};
   }
 
@@ -110,7 +110,7 @@ public:
 /// not exist before the call.
 KATANA_EXPORT Result<void> Pagerank(
     PropertyGraph* pg, const std::string& output_property_name,
-    PagerankPlan plan = {});
+    PagerankPlan plan = {}, const uint32_t num_trials = 1);
 
 KATANA_EXPORT Result<void> PagerankAssertValid(
     PropertyGraph* pg, const std::string& property_name);

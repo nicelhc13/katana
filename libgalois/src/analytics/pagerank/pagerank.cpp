@@ -23,12 +23,12 @@
 katana::Result<void>
 katana::analytics::Pagerank(
     katana::PropertyGraph* pg, const std::string& output_property_name,
-    katana::analytics::PagerankPlan plan) {
+    katana::analytics::PagerankPlan plan, const uint32_t num_trials) {
   switch (plan.algorithm()) {
   case PagerankPlan::kPullResidual:
     return PagerankPullResidual(pg, output_property_name, plan);
   case PagerankPlan::kPullTopological:
-    return PagerankPullTopological(pg, output_property_name, plan);
+    return PagerankPullTopological(pg, output_property_name, plan, num_trials);
   case PagerankPlan::kPushAsynchronous:
     return PagerankPushAsynchronous(pg, output_property_name, plan);
   case PagerankPlan::kPushSynchronous:

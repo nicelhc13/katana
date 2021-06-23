@@ -35,7 +35,7 @@ using NodeValue = katana::PODProperty<PRTy>;
 
 katana::Result<void> PagerankPullTopological(
     katana::PropertyGraph* pg, const std::string& output_property_name,
-    katana::analytics::PagerankPlan plan);
+    katana::analytics::PagerankPlan plan, const uint32_t num_trials);
 
 katana::Result<void> PagerankPullResidual(
     katana::PropertyGraph* pg, const std::string& output_property_name,
